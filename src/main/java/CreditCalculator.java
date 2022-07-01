@@ -1,3 +1,6 @@
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class CreditCalculator {
 
     private int amount;
@@ -20,14 +23,18 @@ public class CreditCalculator {
     }
 
     public double calculateMonthlyPayment() {
-        return 0;
+        double m = percent / 12 / 100;double scale = Math.pow(10, 3);
+        double ratio = (m * Math.pow((1 + m), monthsNumber) / (Math.pow((1 + m), monthsNumber) - 1));
+        BigDecimal ratioResult = new BigDecimal(ratio);
+        ratioResult = ratioResult.setScale(3, RoundingMode.DOWN);
+        return amount * ratioResult.doubleValue();
     }
 
     public double calculateRefundAmount() {
-        return 0;
+        return calculateMonthlyPayment() * monthsNumber;
     }
 
     public double calculateOverpayment() {
-        return 0;
+        return calculateRefundAmount() - amount;
     }
 }
